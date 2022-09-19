@@ -1,19 +1,22 @@
 package com.asusoft.chatserver.business.member;
 
-import com.asusoft.chatserver.entity.member.dto.CreateMemberDto;
+import com.asusoft.chatserver.entity.member.dto.MemberCreateDto;
 import com.asusoft.chatserver.entity.member.dto.LoginDto;
-import com.asusoft.chatserver.entity.member.Member;
-import com.asusoft.chatserver.entity.member.dto.ReadMemberDto;
+import com.asusoft.chatserver.entity.member.dto.MemberReadDto;
 import com.asusoft.chatserver.exceptionhandler.ExceptionMsg;
 import com.asusoft.chatserver.exceptionhandler.exception.DuplicateSaveException;
 import com.asusoft.chatserver.exceptionhandler.exception.LoginException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 @Slf4j
 @RestController
@@ -25,7 +28,7 @@ public class MemberController {
 
     @PostMapping("signup")
     public Long signUp(
-            @Validated CreateMemberDto dto,
+            @Validated MemberCreateDto dto,
             BindingResult bindingResult
     ) throws DuplicateSaveException {
         if (bindingResult.hasErrors()) {
@@ -39,7 +42,7 @@ public class MemberController {
 
     // 로그인
     @PostMapping("login")
-    public ReadMemberDto login(
+    public MemberReadDto login(
             @Validated LoginDto dto,
             BindingResult bindingResult
     ) throws LoginException {
@@ -52,4 +55,20 @@ public class MemberController {
     }
 
     // TODO: - 회원 정보 수정 기능 추가
+    @PostMapping("file")
+    public Long upload(
+            @RequestParam Long memberId,
+            @RequestParam MultipartFile file
+    ) throws IOException {
+        return memberService.profileUpload(memberId, file);
+    }
+
+    @GetMapping("file/{memberId}/{fileName:.+}")
+    public Resource download(
+            @PathVariable Long memberId,
+            @PathVariable String fileName
+    ) throws MalformedURLException {
+        FileUtil fileUtil = new FileUtil();
+        return fileUtil.download(memberId, fileName);
+    }
 }

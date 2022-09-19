@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ReadMemberDto {
+public class MemberReadDto {
+    Long id;
     String name;
 }

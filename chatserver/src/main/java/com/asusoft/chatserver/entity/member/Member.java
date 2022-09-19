@@ -1,8 +1,9 @@
 package com.asusoft.chatserver.entity.member;
 
 import com.asusoft.chatserver.auditing.LastModifiedTimeEntity;
-import com.asusoft.chatserver.entity.member.dto.CreateMemberDto;
-import com.asusoft.chatserver.entity.member.dto.ReadMemberDto;
+import com.asusoft.chatserver.entity.member.dto.MemberCreateDto;
+import com.asusoft.chatserver.entity.member.dto.MemberReadDto;
+import com.sun.istack.Nullable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,17 +36,25 @@ public class Member extends LastModifiedTimeEntity {
     @NotNull(message = "Company loginPw")
     String loginPw;
 
-    private Member(CreateMemberDto dto) {
+    @Nullable
+    String profileUrl;
+
+
+    private Member(MemberCreateDto dto) {
         name = dto.getName();
         loginId = dto.getId();
         loginPw = dto.getPw();
     }
 
-    public ReadMemberDto getReadDto() {
-        return new ReadMemberDto(name);
+    public void updateProfileUrl(String url) {
+        this.profileUrl = url;
     }
 
-    public static Member create(CreateMemberDto dto) {
+    public MemberReadDto getReadDto() {
+        return new MemberReadDto(id, name);
+    }
+
+    public static Member create(MemberCreateDto dto) {
         return new Member(dto);
     }
 }
