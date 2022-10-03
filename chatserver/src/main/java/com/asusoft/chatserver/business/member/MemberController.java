@@ -56,7 +56,7 @@ public class MemberController {
 
     // TODO: - 회원 정보 수정 기능 추가
     @PostMapping("file")
-    public Long upload(
+    public MemberReadDto upload(
             @RequestParam Long memberId,
             @RequestParam MultipartFile file
     ) throws IOException {

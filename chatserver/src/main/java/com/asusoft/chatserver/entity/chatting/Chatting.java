@@ -1,15 +1,14 @@
 package com.asusoft.chatserver.entity.chatting;
 
 import com.asusoft.chatserver.auditing.LastModifiedTimeEntity;
+import com.asusoft.chatserver.entity.chatroom.ChatRoom;
+import com.asusoft.chatserver.entity.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -25,5 +24,13 @@ public class Chatting extends LastModifiedTimeEntity {
     @NotNull(message = "Chatting message")
     String message;
 
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    Member member;
 
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "CHAT_ROOM_ID")
+    ChatRoom chatRoom;
 }

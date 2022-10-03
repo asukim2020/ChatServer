@@ -51,7 +51,7 @@ public class Member extends LastModifiedTimeEntity {
     }
 
     public MemberReadDto getReadDto() {
-        return new MemberReadDto(id, name);
+        return new MemberReadDto(id, name, profileUrl);
     }
 
     public static Member create(MemberCreateDto dto) {

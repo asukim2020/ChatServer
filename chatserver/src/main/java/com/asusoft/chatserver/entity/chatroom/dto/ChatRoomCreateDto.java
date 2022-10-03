@@ -5,6 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CreateChatRoomDto {
+public class ChatRoomCreateDto {
     String name;
+    Long memberId;
+    Long friendId;
 }

@@ -2,8 +2,8 @@ package com.asusoft.chatserver.entity.entry;
 
 import com.asusoft.chatserver.auditing.CreateTimeEntity;
 import com.asusoft.chatserver.entity.chatroom.ChatRoom;
-import com.asusoft.chatserver.entity.entry.dto.CreateEntryDto;
 import com.asusoft.chatserver.entity.member.Member;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,13 +28,17 @@ public class Entry extends CreateTimeEntity {
     Member member;
 
     @NotNull(message = "Entry ChatRoom")
-//    @ManyToOne(fetch = FetchType.LAZY)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CHAT_ROOM_ID")
+    @JsonIgnore
     ChatRoom chatRoom;
 
     private Entry(Member member, ChatRoom chatRoom) {
         this.member = member;
+        this.chatRoom = chatRoom;
+    }
+
+    public void setChatRoom(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
 

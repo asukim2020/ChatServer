@@ -8,4 +8,14 @@ import lombok.Data;
 public class MemberReadDto {
     Long id;
     String name;
+    String profileUrl;
+
+    @Override
+    public String toString() {
+        return "MemberReadDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", profileUrl='" + profileUrl + '\'' +
+                '}';
+    }
 }

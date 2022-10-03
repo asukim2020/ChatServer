@@ -60,7 +60,7 @@ public class MemberService {
     }
 
     @Transactional
-    public Long profileUpload(Long memberId, MultipartFile file) throws IOException {
+    public MemberReadDto profileUpload(Long memberId, MultipartFile file) throws IOException {
         FileUtil fileUtil = new FileUtil();
         String url = fileUtil.upload(memberId, file);
 
@@ -70,7 +70,7 @@ public class MemberService {
 
         member.updateProfileUrl(url);
 
-        return member.getId();
+        return member.getReadDto();
     }
     
     // TODO : - update 추가
