@@ -29,7 +29,7 @@ public class ChattingService {
     private final MemberRepository memberRepository;
     private final FcmConfig fcmConfig;
     
-    public Long save(ChattingCreateDto dto) throws IOException, FirebaseMessagingException {
+    public ChattingReadDto save(ChattingCreateDto dto) throws IOException, FirebaseMessagingException {
 
         String message = dto.getMessage();
 
@@ -50,8 +50,8 @@ public class ChattingService {
 
         ChattingReadDto chattingReadDto = new ChattingReadDto(chatting);
         sendFcm(friend.getFcmToken(), my.getName(), chattingReadDto);
-        
-        return chatting.getId();
+
+        return new ChattingReadDto(chatting);
     }
 
     public void sendFcm(String fcmToken, String title, ChattingReadDto dto) throws FirebaseMessagingException, IOException {

@@ -19,7 +19,7 @@ public class ChattingController {
     private final ChattingService chattingService;
 
     @PostMapping("/create")
-    public Long create(ChattingCreateDto dto) throws IOException, FirebaseMessagingException {
+    public ChattingReadDto create(ChattingCreateDto dto) throws IOException, FirebaseMessagingException {
         return chattingService.save(dto);
     }
 
