@@ -2,6 +2,8 @@ package com.asusoft.chatserver.entity.chatting;
 
 import com.asusoft.chatserver.auditing.LastModifiedTimeEntity;
 import com.asusoft.chatserver.entity.chatroom.ChatRoom;
+import com.asusoft.chatserver.entity.chatting.dto.ChattingCreateDto;
+import com.asusoft.chatserver.entity.chatting.dto.ChattingReadDto;
 import com.asusoft.chatserver.entity.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,12 +27,22 @@ public class Chatting extends LastModifiedTimeEntity {
     String message;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     Member member;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CHAT_ROOM_ID")
     ChatRoom chatRoom;
+
+    private Chatting(String message, Member member, ChatRoom chatRoom) {
+        this.message = message;
+        this.member = member;
+        this.chatRoom = chatRoom;
+    }
+
+    public static Chatting create(String message, Member member, ChatRoom chatRoom) {
+        return new Chatting(message, member, chatRoom);
+    }
 }

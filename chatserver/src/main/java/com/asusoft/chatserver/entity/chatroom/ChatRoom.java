@@ -28,7 +28,7 @@ public class ChatRoom extends LastModifiedTimeEntity {
     Long id;
 
     @NotNull(message = "ChatRoom name")
-    @Column(unique = true)
+    @Column
     String name;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
@@ -41,6 +41,10 @@ public class ChatRoom extends LastModifiedTimeEntity {
 //    public ChatRoomReadDto getChatRoomDto() {
 //        return new ChatRoomReadDto(id, name);
 //    }
+
+    public ChatRoomReadDto getDto() {
+        return new ChatRoomReadDto(this);
+    }
 
     public static ChatRoom create(ChatRoomCreateDto dto) {
         return new ChatRoom(dto);

@@ -60,7 +60,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberReadDto profileUpload(Long memberId, MultipartFile file) throws IOException {
+    public MemberReadDto uploadProfile(Long memberId, MultipartFile file) throws IOException {
         FileUtil fileUtil = new FileUtil();
         String url = fileUtil.upload(memberId, file);
 
@@ -72,6 +72,17 @@ public class MemberService {
 
         return member.getReadDto();
     }
-    
+
+    @Transactional
+    public Long uploadFcmToken(Long memberId, String fcmToken) {
+
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new IllegalArgumentException("not found member")
+        );
+
+        member.updateFcmToken(fcmToken);
+        return member.getId();
+    }
+
     // TODO : - update 추가
 }

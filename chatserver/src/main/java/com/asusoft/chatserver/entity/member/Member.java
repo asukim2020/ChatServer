@@ -37,6 +37,9 @@ public class Member extends LastModifiedTimeEntity {
     String loginPw;
 
     @Nullable
+    String fcmToken;
+
+    @Nullable
     String profileUrl;
 
 
@@ -48,6 +51,10 @@ public class Member extends LastModifiedTimeEntity {
 
     public void updateProfileUrl(String url) {
         this.profileUrl = url;
+    }
+
+    public void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 
     public MemberReadDto getReadDto() {

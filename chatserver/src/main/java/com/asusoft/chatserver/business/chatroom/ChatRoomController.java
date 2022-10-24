@@ -27,7 +27,7 @@ public class ChatRoomController {
     private final ChatRoomService chatRoomService;
 
     @PostMapping("/create")
-    public Long create(
+    public ChatRoomReadDto create(
             @Validated ChatRoomCreateDto dto,
             BindingResult bindingResult
     ) {

@@ -1,23 +1,17 @@
 package com.asusoft.chatserver.business.chatroom;
 
+import com.asusoft.chatserver.FcmConfig;
+import com.asusoft.chatserver.business.chatting.ChattingService;
 import com.asusoft.chatserver.business.friend.FriendService;
 import com.asusoft.chatserver.business.member.MemberRepository;
 import com.asusoft.chatserver.business.member.MemberService;
-import com.asusoft.chatserver.entity.chatroom.dto.ChatRoomCreateDto;
-import com.asusoft.chatserver.entity.chatroom.dto.ChatRoomReadDto;
-import com.asusoft.chatserver.entity.friend.dto.FriendCreateDto;
-import com.asusoft.chatserver.entity.member.Member;
-import com.asusoft.chatserver.entity.member.dto.MemberCreateDto;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.io.IOException;
 
 @SpringBootTest
 @Transactional
@@ -33,9 +27,16 @@ class ChatRoomServiceTest {
     @Autowired
     ChatRoomService chatRoomService;
 
-    @Test
-    void save() {
+    @Autowired
+    FcmConfig fcmConfig;
 
+    @Autowired
+    ChattingService chattingService;
+
+    @Test
+    void save() throws IOException, FirebaseMessagingException {
+        String token = "fn0BSV6QQA6csvjvdTXzv0:APA91bFO60v1L2GZJx7Qi9Yl6VQbOuDPaZ0MlepxnFsTYieiIzozFqT8G8evsLlSIQlOA0D9LAVwLPLdgkeAORiZi1gH8_MMxgQlyc35t4sEyta53kTIrFA7EJW0kzWVgFRGyMu7FXxN";
+        chattingService.sendFcmTest(token);
     }
 
 //    @Test

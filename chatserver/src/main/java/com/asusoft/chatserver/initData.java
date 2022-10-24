@@ -1,11 +1,13 @@
 package com.asusoft.chatserver;
 
 import com.asusoft.chatserver.business.chatroom.ChatRoomService;
+import com.asusoft.chatserver.business.chatting.ChattingService;
 import com.asusoft.chatserver.business.friend.FriendService;
 import com.asusoft.chatserver.business.member.MemberRepository;
 import com.asusoft.chatserver.business.member.MemberService;
 import com.asusoft.chatserver.entity.chatroom.dto.ChatRoomCreateDto;
 import com.asusoft.chatserver.entity.chatroom.dto.ChatRoomReadDto;
+import com.asusoft.chatserver.entity.chatting.dto.ChattingCreateDto;
 import com.asusoft.chatserver.entity.friend.dto.FriendCreateDto;
 import com.asusoft.chatserver.entity.member.Member;
 import com.asusoft.chatserver.entity.member.dto.MemberCreateDto;
@@ -34,8 +36,8 @@ public class initData {
         private final MemberService memberService;
         private final MemberRepository memberRepository;
         private final FriendService friendService;
-
         private final ChatRoomService chatRoomService;
+        private final ChattingService chattingService;
 
         @Transactional
         public void init() throws Exception {
@@ -48,15 +50,22 @@ public class initData {
             member.get().updateProfileUrl("http://172.30.1.10:8080/member/file/1/1.jpg");
 
             FriendCreateDto dto = new FriendCreateDto(saveId, memberDto2.getName());
+            FriendCreateDto dto2 = new FriendCreateDto(saveId2, memberDto.getName());
             friendService.save(dto);
+            friendService.save(dto2);
 
             ChatRoomCreateDto chatRoomDto = new ChatRoomCreateDto("채팅방", saveId, saveId2);
-            chatRoomService.save(chatRoomDto);
+            ChatRoomReadDto chatRoomReadDto = chatRoomService.save(chatRoomDto);
 
             List<ChatRoomReadDto> list = chatRoomService.list(saveId);
             System.out.println("==========================");
             System.out.println(list);
             System.out.println("==========================");
+
+            ChattingCreateDto chattingCreateDto1 = new ChattingCreateDto("ㅎㅇ", saveId, saveId2, chatRoomReadDto.getId());
+            ChattingCreateDto chattingCreateDto2 = new ChattingCreateDto("ㅎㅇㅇ", saveId2, saveId, chatRoomReadDto.getId());
+            chattingService.save(chattingCreateDto1);
+            chattingService.save(chattingCreateDto2);
         }
     }
 

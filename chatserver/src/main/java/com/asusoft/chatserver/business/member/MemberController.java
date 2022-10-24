@@ -9,7 +9,6 @@ import com.asusoft.chatserver.exceptionhandler.exception.LoginException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +59,7 @@ public class MemberController {
             @RequestParam Long memberId,
             @RequestParam MultipartFile file
     ) throws IOException {
-        return memberService.profileUpload(memberId, file);
+        return memberService.uploadProfile(memberId, file);
     }
 
     @GetMapping("file/{memberId}/{fileName:.+}")
@@ -70,5 +69,13 @@ public class MemberController {
     ) throws MalformedURLException {
         FileUtil fileUtil = new FileUtil();
         return fileUtil.download(memberId, fileName);
+    }
+
+    @PostMapping("fcmToken")
+    public Long uploadFcmToken(
+            @RequestParam Long memberId,
+            @RequestParam String fcmToken
+    ) {
+        return memberService.uploadFcmToken(memberId, fcmToken);
     }
 }

@@ -24,6 +24,14 @@ public class ChatRoomReadDto {
         entryList = entrys.stream().map(EntryReadDto::new).collect(Collectors.toList());
     }
 
+    public ChatRoomReadDto(ChatRoom chatRoom) {
+        List<Entry> entrys = chatRoom.getEntryList();
+
+        id = chatRoom.getId();
+        name = chatRoom.getName();
+        entryList = entrys.stream().map(EntryReadDto::new).collect(Collectors.toList());
+    }
+
     @Override
     public String toString() {
         return "ChatRoomReadDto{" +

@@ -25,7 +25,7 @@ public class ChatRoomService {
     private final MemberRepository memberRepository;
     private final ChatRoomRepository chatRoomRepository;
 
-    public Long save(ChatRoomCreateDto chatRoomDto) {
+    public ChatRoomReadDto save(ChatRoomCreateDto chatRoomDto) {
 
         ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.create(chatRoomDto));
 
@@ -53,7 +53,7 @@ public class ChatRoomService {
         chatRoom.addEntry(myEntry);
         chatRoom.addEntry(friendEntry);
 
-        return chatRoom.getId();
+        return chatRoom.getDto();
     }
 
 
