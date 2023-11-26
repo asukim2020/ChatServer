@@ -27,4 +27,9 @@ public class ChattingController {
     public List<ChattingReadDto> list(Long chatroomId) {
         return chattingService.list(chatroomId);
     }
+
+    @PostMapping("/read")
+    public Long read(Long entryId, Long lastReadChattingId, Long friendId) {
+        return chattingService.read(entryId, lastReadChattingId, friendId);
+    }
 }

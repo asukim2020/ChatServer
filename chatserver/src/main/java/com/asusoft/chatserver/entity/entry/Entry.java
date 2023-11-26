@@ -33,16 +33,25 @@ public class Entry extends CreateTimeEntity {
     @JsonIgnore
     ChatRoom chatRoom;
 
-    private Entry(Member member, ChatRoom chatRoom) {
+    Long lastReadChattingId;
+
+    private Entry(Member member, ChatRoom chatRoom, Long lastReadChattingId) {
         this.member = member;
         this.chatRoom = chatRoom;
+        this.lastReadChattingId = lastReadChattingId;
     }
 
     public void setChatRoom(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
 
+    public void setLastReadChattingId(Long lastReadChattingId) {
+        if (this.lastReadChattingId < lastReadChattingId) {
+            this.lastReadChattingId = lastReadChattingId;
+        }
+    }
+
     public static Entry create(Member member, ChatRoom chatRoom) {
-        return new Entry(member, chatRoom);
+        return new Entry(member, chatRoom, 0L);
     }
 }

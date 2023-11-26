@@ -28,7 +28,7 @@ public class MemberService {
         Member member = Member.create(dto);
         try {
             Member saveMember = memberRepository.save(member);
-            return saveMember.getId();
+            return saveMember.getKey();
         } catch (Exception e) {
             throw new DuplicateSaveException("duplicate sign up exception");
         }
@@ -43,7 +43,7 @@ public class MemberService {
     }
 
     private Member get(String loginId) throws LoginException {
-        Member member = memberRepository.findByLoginId(loginId).orElseThrow(
+        Member member = memberRepository.findById(loginId).orElseThrow(
                 () -> new LoginException("get error in MemberService")
         );
 
@@ -52,7 +52,7 @@ public class MemberService {
 
     public MemberReadDto login(LoginDto dto) throws LoginException {
         Member member = get(dto.getId());
-        if (member.getLoginPw().equals(dto.getPw())) {
+        if (member.getPw().equals(dto.getPw())) {
             return member.getReadDto();
         }
 
@@ -81,7 +81,7 @@ public class MemberService {
         );
 
         member.updateFcmToken(fcmToken);
-        return member.getId();
+        return member.getKey();
     }
 
     // TODO : - update 추가

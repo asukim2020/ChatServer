@@ -17,6 +17,6 @@ public interface EntryRepository extends JpaRepository<Entry, Long> {
     @Query("select e from Entry e" +
             " join fetch e.member m" +
             " join fetch e.chatRoom cr" +
-            " where e.member.id = :id")
+            " where e.member.key = :id")
     List<Entry> findByMemberId(@Param(value = "id") Long memberId);
 }

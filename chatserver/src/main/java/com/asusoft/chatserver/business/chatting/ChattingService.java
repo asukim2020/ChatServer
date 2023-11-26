@@ -2,22 +2,25 @@ package com.asusoft.chatserver.business.chatting;
 
 import com.asusoft.chatserver.FcmConfig;
 import com.asusoft.chatserver.business.chatroom.ChatRoomRepository;
+import com.asusoft.chatserver.business.entry.EntryRepository;
 import com.asusoft.chatserver.business.member.MemberRepository;
 import com.asusoft.chatserver.entity.chatroom.ChatRoom;
 import com.asusoft.chatserver.entity.chatting.Chatting;
 import com.asusoft.chatserver.entity.chatting.dto.ChattingCreateDto;
 import com.asusoft.chatserver.entity.chatting.dto.ChattingReadDto;
+import com.asusoft.chatserver.entity.entry.Entry;
 import com.asusoft.chatserver.entity.member.Member;
+import com.asusoft.chatserver.exceptionhandler.exception.LoginException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,8 +30,9 @@ public class ChattingService {
     private final ChattingRepository chattingRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final MemberRepository memberRepository;
+    private final EntryRepository entryRepository;
     private final FcmConfig fcmConfig;
-    
+
     public ChattingReadDto save(ChattingCreateDto dto) throws IOException, FirebaseMessagingException {
 
         String message = dto.getMessage();
@@ -49,12 +53,12 @@ public class ChattingService {
         chattingRepository.save(chatting);
 
         ChattingReadDto chattingReadDto = new ChattingReadDto(chatting);
-        sendFcm(friend.getFcmToken(), my.getName(), chattingReadDto);
+        sendChattingFcm(friend.getFcmToken(), my.getName(), chattingReadDto);
 
         return new ChattingReadDto(chatting);
     }
 
-    public void sendFcm(String fcmToken, String title, ChattingReadDto dto) throws FirebaseMessagingException, IOException {
+    public void sendChattingFcm(String fcmToken, String title, ChattingReadDto dto) throws FirebaseMessagingException, IOException {
         if (fcmToken == null) return;
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -86,4 +90,32 @@ public class ChattingService {
         List<Chatting> list = chattingRepository.findByChatRoomId(chatroomId);
         return list.stream().map(ChattingReadDto::new).collect(Collectors.toList());
     }
+
+    @Transactional
+    public Long read(Long entryId, Long lastReadChattingId, Long friendId) throws IllegalArgumentException {
+        Entry entry = entryRepository.findById(entryId).orElseThrow(
+                () -> new IllegalArgumentException("not found entry")
+        );
+
+        entry.setLastReadChattingId(lastReadChattingId);
+
+        return entry.getId();
+    }
+
+    public void sendReadFcm(String fcmToken, String title, ChattingReadDto dto) throws FirebaseMessagingException, IOException {
+        if (fcmToken == null) return;
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(dto);
+
+        Message message = Message.builder()
+                .setToken(fcmToken)
+                .putData("title", title)
+                .putData("message", dto.getMessage())
+                .putData("dto", json)
+                .build();
+
+        FirebaseMessaging.getInstance(fcmConfig.firebaseApp()).send(message);
+    }
+
 }

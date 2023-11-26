@@ -28,7 +28,7 @@ public class ChattingReadDto {
     public ChattingReadDto(Chatting chatting) {
         id = chatting.getId();
         message = chatting.getMessage();
-        memberId = chatting.getMember().getId();
+        memberId = chatting.getMember().getKey();
         chatRoomId = chatting.getChatRoom().getId();
         createdTime = chatting.getCreatedTime();
     }

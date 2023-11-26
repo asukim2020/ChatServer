@@ -23,7 +23,7 @@ public class Member extends LastModifiedTimeEntity {
     @Id
     @GeneratedValue
     @Column(name = "MEMBER_ID")
-    Long id;
+    Long key;
 
     @NotNull(message = "Company name")
     @Column(unique = true)
@@ -31,10 +31,10 @@ public class Member extends LastModifiedTimeEntity {
 
     @NotNull(message = "Company loginId")
     @Column(unique = true)
-    String loginId;
+    String id;
 
     @NotNull(message = "Company loginPw")
-    String loginPw;
+    String pw;
 
     @Nullable
     String fcmToken;
@@ -45,8 +45,8 @@ public class Member extends LastModifiedTimeEntity {
 
     private Member(MemberCreateDto dto) {
         name = dto.getName();
-        loginId = dto.getId();
-        loginPw = dto.getPw();
+        id = dto.getId();
+        pw = dto.getPw();
     }
 
     public void updateProfileUrl(String url) {
@@ -58,7 +58,7 @@ public class Member extends LastModifiedTimeEntity {
     }
 
     public MemberReadDto getReadDto() {
-        return new MemberReadDto(id, name, profileUrl);
+        return new MemberReadDto(key, id, name, profileUrl);
     }
 
     public static Member create(MemberCreateDto dto) {

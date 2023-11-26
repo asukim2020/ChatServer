@@ -27,7 +27,7 @@ public class initData {
 
     @PostConstruct
     public void init() throws Exception {
-//        initDataService.init();
+        initDataService.init();
     }
 
     @Component

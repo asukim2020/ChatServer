@@ -15,11 +15,11 @@ public class Friend {
     @Id
     @GeneratedValue
     @Column(name = "FRIEND_ID")
-    Long id;
+    Long key;
 
     @NotNull
     @Column(name = "MEMBER__ID")
-    Long memberId;
+    Long memberKey;
 
     @NotNull
     @ManyToOne
@@ -31,7 +31,7 @@ public class Friend {
     }
 
     private Friend(Member my, Member friend) {
-        this.memberId = my.getId();
+        this.memberKey = my.getKey();
         this.friend = friend;
     }
 

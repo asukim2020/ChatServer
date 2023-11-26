@@ -30,7 +30,7 @@ public class FriendService {
                 () -> new IllegalArgumentException("not found member")
         );
 
-        Optional<Friend> findFriend = friendRepository.findByMemberIdAndFriendId(my.getId(), friend.getId());
+        Optional<Friend> findFriend = friendRepository.findByMemberKeyAndKey(my.getKey(), friend.getKey());
         if (findFriend.isPresent()) {
             throw new DuplicateSaveException("duplicate addFriend exception");
         }
@@ -39,7 +39,7 @@ public class FriendService {
 
         try {
             Friend saveFriend = friendRepository.save(createFriend);
-            return saveFriend.getId();
+            return saveFriend.getKey();
         } catch (Exception e) {
             throw new DuplicateSaveException("duplicate addFriend exception");
         }
@@ -47,19 +47,19 @@ public class FriendService {
     }
 
     public List<MemberReadDto> list(Long memberId) {
-        List<Friend> friendList = friendRepository.findByMemberId(memberId);
+        List<Friend> friendList = friendRepository.findByMemberKey(memberId);
 
         return friendList.stream()
                 .map(friend -> friend.getFriend().getReadDto())
                 .collect(Collectors.toList());
     }
 
-    public Long remove(Long memberId, Long friendId) {
-        Friend friend = friendRepository.findByMemberIdAndFriendId(memberId, friendId).orElseThrow(
+    public Long remove(Long memberKey, Long friendKey) {
+        Friend friend = friendRepository.findByMemberKeyAndKey(memberKey, friendKey).orElseThrow(
                 () -> new IllegalArgumentException("not found friend")
         );
 
         friendRepository.delete(friend);
-        return friend.getId();
+        return friend.getKey();
     }
 }
