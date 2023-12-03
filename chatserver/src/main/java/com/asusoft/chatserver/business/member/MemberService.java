@@ -44,7 +44,7 @@ public class MemberService {
 
     private Member get(String loginId) throws LoginException {
         Member member = memberRepository.findById(loginId).orElseThrow(
-                () -> new LoginException("get error in MemberService")
+                () -> new LoginException("incorrect id")
         );
 
         return member;
@@ -56,7 +56,7 @@ public class MemberService {
             return member.getReadDto();
         }
 
-        throw new LoginException("login fail");
+        throw new LoginException("incorrect pw");
     }
 
     @Transactional
